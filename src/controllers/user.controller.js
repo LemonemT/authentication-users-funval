@@ -28,19 +28,18 @@ export const find = async (req, res) => {
 
 export const store = async (req, res) => {
   try {
-    console.log(req.file); 
-    const { fName, mName, lName, username, email, password } = req.body
-    const filename = req.file ? req.file.filename : null;  
+    console.log(req.file)
+    const { name, bio, phone, email, password } = req.body
+    const filename = req.file ? req.file.filename : null
 
-    if (!fName || !username || !email || !password) return res.status(400).json({ message: 'Faltan datos' })
+    if (!name || !email || !password) return res.status(400).json({ message: 'Faltan datos' })
 
     const nuevoUsuario = await User.create({
-      fName,
-      username,
+      name,
+      bio,
+      phone,
       email,
       password,
-      mName,
-      lName,
       image: filename
     })
 
@@ -51,7 +50,6 @@ export const store = async (req, res) => {
     res.status(500).json({ message: error.message })
   }
 }
-
 
 export const showImage = async (req, res) => {
   try {

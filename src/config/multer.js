@@ -13,13 +13,16 @@ const storage = multer.diskStorage({
 
 const imageFilter = async function (req, file, cb) {
   const { mimetype } = file
-  const { username, email } = req.body
+  const { email } = req.body
 
-  const usuarioUsername = await User.where('username', username)
+  if (!email) {
+    return cb(new Error('Faltan datos del usuario'))
+  }
+
   const usuarioEmail = await User.where('email', email)
 
-  if (usuarioUsername.length > 0 || usuarioEmail.length > 0) {
-    return cb(new Error('Usuario o correo existentes'))
+  if (usuarioEmail.length > 0) {
+    return cb(new Error('Correo existente'))
   }
 
   if (mimetype.includes('image')) {
