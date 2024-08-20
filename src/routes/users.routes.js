@@ -115,17 +115,20 @@ router.post('/', uploadImage.single('image'), handleError, store)
  *               email:
  *                 type: string
  *                 example: "juan@example.com"
+ *               image:
+ *                 type: string
+ *                 example: "image.jpg"  # Este campo no se debe enviar para evitar cambios en la imagen
  *     responses:
- *       200:
- *         description: Usuario actualizado
- *       400:
- *         description: Solicitud incorrecta
- *       404:
- *         description: Usuario no encontrado
- *       500:
- *         description: Error en el servidor
+ *        200:
+ *          description: Usuario actualizado
+ *        400:
+ *          description: Solicitud incorrecta
+ *        404:
+ *          description: Usuario no encontrado
+ *        500:
+ *          description: Error en el servidor
  */
-router.put('/', update)
+router.put('/update', update)
 
 /**
  * @swagger

@@ -6,7 +6,6 @@ import { validateCORS } from './middlewares/middleware.js'
 import morgan from 'morgan'
 import { swaggerDocs } from './config/swagger.js'
 
-
 const app = express()
 
 app.use(morgan('dev'))

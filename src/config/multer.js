@@ -1,4 +1,5 @@
 import multer from 'multer'
+import path from 'path'
 import User from '../models/User.js'
 
 const storage = multer.diskStorage({
@@ -19,10 +20,12 @@ const imageFilter = async function (req, file, cb) {
     return cb(new Error('Faltan datos del usuario'))
   }
 
-  const usuarioEmail = await User.where('email', email)
+  if (req.method === 'POST') {
+    const usuarioEmail = await User.where('email', email)
 
-  if (usuarioEmail.length > 0) {
-    return cb(new Error('Correo existente'))
+    if (usuarioEmail.length > 0) {
+      return cb(new Error('Correo existente'))
+    }
   }
 
   if (mimetype.includes('image')) {

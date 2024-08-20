@@ -30,7 +30,7 @@ class User {
     return nuevoUsuario
   }
 
-  static async update ({ name, bio, phone, email, image }) {
+  static async update ({ name, bio, phone, email }) {
     const campos = ['name', 'bio', 'phone']
     const valores = [name, bio, phone]
 

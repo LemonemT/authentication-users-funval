@@ -28,7 +28,6 @@ export const find = async (req, res) => {
 
 export const store = async (req, res) => {
   try {
-    console.log(req.file)
     const { name, bio, phone, email, password } = req.body
     const filename = req.file ? req.file.filename : null
 
@@ -53,34 +52,23 @@ export const store = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const { name, bio, phone, email } = req.body
+    const { email, name, bio, phone } = req.body;
 
-    if (!name || !email) return res.status(400).json({ message: 'Faltan datos' })
-
-    // Obtiene los datos del usuario para conservar la imagen
-    const usuarioActual = await User.getByEmail(email) // Se obtiene el usuario por email
-
-    if (usuarioActual.length === 0) {
-      return res.status(404).json({ message: 'Usuario no encontrado' })
+    const usuario = await User.getByEmail(email);
+    if (usuario.length === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    const currentImage = usuarioActual[0].image
+    const image = usuario[0].image;
 
-    const resultado = await User.update({
-      name,
-      bio,
-      phone,
-      email,
-      image: currentImage // Conserva la imagen actual
-    })
+    await User.update({ name, bio, phone, email, image });
 
-    if (resultado[0].affectedRows === 1) return res.json({ message: 'Usuario actualizado' })
-
-    res.status(500).json({ message: 'Error al actualizar el usuario' })
+    res.json({ message: 'Usuario actualizado correctamente' });
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
-}
+};
+
 
 export const showImage = async (req, res) => {
   try {
