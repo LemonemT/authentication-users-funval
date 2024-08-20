@@ -30,8 +30,25 @@ class User {
     return nuevoUsuario
   }
 
+  static async update ({ name, bio, phone, email, image }) {
+    const campos = ['name', 'bio', 'phone']
+    const valores = [name, bio, phone]
+
+    let consulta = 'UPDATE users SET '
+    consulta += campos.map((campo, index) => `${campo} = ?`).join(', ')
+    consulta += ' WHERE email = ?'
+
+    const resultado = await pool.execute(consulta, [...valores, email])
+    return resultado
+  }
+
   static async getByUsernameOrEmail (valor) {
     const usuario = await pool.execute('SELECT * FROM users WHERE email = ? OR name = ?', [valor, valor])
+    return usuario[0]
+  }
+
+  static async getByEmail (email) {
+    const usuario = await pool.execute('SELECT * FROM users WHERE email = ?', [email])
     return usuario[0]
   }
 }

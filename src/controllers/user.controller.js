@@ -51,6 +51,37 @@ export const store = async (req, res) => {
   }
 }
 
+export const update = async (req, res) => {
+  try {
+    const { name, bio, phone, email } = req.body
+
+    if (!name || !email) return res.status(400).json({ message: 'Faltan datos' })
+
+    // Obtiene los datos del usuario para conservar la imagen
+    const usuarioActual = await User.getByEmail(email) // Se obtiene el usuario por email
+
+    if (usuarioActual.length === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado' })
+    }
+
+    const currentImage = usuarioActual[0].image
+
+    const resultado = await User.update({
+      name,
+      bio,
+      phone,
+      email,
+      image: currentImage // Conserva la imagen actual
+    })
+
+    if (resultado[0].affectedRows === 1) return res.json({ message: 'Usuario actualizado' })
+
+    res.status(500).json({ message: 'Error al actualizar el usuario' })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 export const showImage = async (req, res) => {
   try {
     const { nombre } = req.params

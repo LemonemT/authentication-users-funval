@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { find, index, showImage, store } from '../controllers/user.controller.js'
+import { find, index, showImage, store, update } from '../controllers/user.controller.js'
 import { uploadImage } from '../config/multer.js'
 import { handleError } from '../middlewares/middleware.js'
 
@@ -89,6 +89,43 @@ router.get('/:id', find)
  *         description: Error en el servidor
  */
 router.post('/', uploadImage.single('image'), handleError, store)
+
+/**
+ * @swagger
+ * /api/users:
+ *   put:
+ *     summary: Actualiza los datos del usuario
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Juan Pérez"
+ *               bio:
+ *                 type: string
+ *                 example: "Desarrollador web"
+ *               phone:
+ *                 type: string
+ *                 example: "123456789"
+ *               email:
+ *                 type: string
+ *                 example: "juan@example.com"
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado
+ *       400:
+ *         description: Solicitud incorrecta
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error en el servidor
+ */
+router.put('/', update)
 
 /**
  * @swagger
